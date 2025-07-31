@@ -35,7 +35,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'todo.apps.UserConfig',
+    'todo.apps.TodoConfig',
+    'category.apps.CategoryConfig',
+    'tag.apps.TagConfig',
+    'dashboard.apps.DashboardConfig',
 ]
 
 # DRF全局配置
