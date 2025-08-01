@@ -1,7 +1,8 @@
 from django.urls import path
 
-from todo.views import TestView
+from todo.views import TodoListView, TodoDetailView
 
 urlpatterns = [
-    path('test', TestView.as_view(), name='test')
+    path('', TodoListView.as_view(), name='todo-list'),
+    path('<int:pk>/', TodoDetailView.as_view(), name='todo-detail')
 ]

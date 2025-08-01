@@ -1,5 +1,6 @@
-from django.http import JsonResponse
 from django.views import View
+
+from utils.response_utils import success_result
 
 
 # Create your views here.
@@ -7,8 +8,4 @@ from django.views import View
 class DashboardView(View):
 
     def get(self, request):
-        return JsonResponse({
-            'code': 200,
-            'msg': '成功',
-            'data': list()
-        })
+        return success_result(list())

@@ -1,47 +1,53 @@
-from django.http import JsonResponse
+# todo/views.py
+from django.shortcuts import get_object_or_404
 from django.views import View
 
-from todo.models import Todo, TodoTag, Tag
+from utils.response_utils import success_result, error_result, list_result
+from utils.validation_utils import validate_pagination_params, handle_validation_error, ValidationError
+from .models import Todo
+from .services import get_todos_with_tags, get_todo_detail
 
 
-# Create your views here.
-class TestView(View):
+class TodoListView(View):
+    """
+    查询 todo列表
+    """
 
     def get(self, request):
-        todo_list = Todo.objects.values()
-        # 查询所有待办事项
-        todo_list = Todo.objects.all()
-        result = []
+        try:
+            # 获取查询参数
+            keyword = request.GET.get('keyword', None)
+            page = request.GET.get('page', 1)
+            page_size = request.GET.get('pageSize', 20)
 
-        for todo in todo_list:
-            # 基础待办信息
-            todo_data = {
-                "id": todo.id,
-                "title": todo.title,
-                "content": todo.content,
-                "status": todo.status,
-                "priority": todo.priority,
-                "due_time": todo.due_time.isoformat() + "Z" if todo.due_time else None,
-                "category_id": todo.category_id,
-                "tags": [],  # 用于存放标签信息
-            }
+            # 使用参数验证工具验证分页参数
+            validated_page, validated_page_size = validate_pagination_params(page, page_size)
 
-            # 查询当前待办关联的所有标签ID
-            todo_tag_relations = TodoTag.objects.filter(todo_id=todo.id)
-            tag_ids = [relation.tag_id for relation in todo_tag_relations]
+            # 调用服务层获取数据
+            result = get_todos_with_tags(keyword=keyword, page=validated_page, page_size=validated_page_size)
+            return list_result(
+                data=result['list'],
+                total=result['total'],
+                page=result['page'],
+                page_size=result['page_size']
+            )
+        except ValidationError as e:
+            return handle_validation_error(e)
+        except Exception as e:
+            return error_result(f'获取数据失败: {str(e)}', data=[])
 
-            # 查询标签详情并组装
-            if tag_ids:
-                tags = Tag.objects.filter(id__in=tag_ids)
-                todo_data["tags"] = [
-                    {"tag_id": tag.id, "tag_name": tag.name}
-                    for tag in tags
-                ]
 
-            result.append(todo_data)
+class TodoDetailView(View):
+    """
+    查询 todo详情，pk 是 primary key的意思
+    """
 
-        return JsonResponse({
-            'code': 200,
-            'msg': '成功',
-            'data': result
-        })
+    def get(self, request, pk):
+        try:
+            # 验证待办是否存在
+            get_object_or_404(Todo, id=pk)
+            # 调用服务层获取详情
+            detail_data = get_todo_detail(pk)
+            return success_result(detail_data)
+        except Exception as e:
+            return error_result(f'获取详情失败: {str(e)}', data=None)

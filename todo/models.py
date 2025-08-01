@@ -48,11 +48,13 @@ class Todo(models.Model):
         verbose_name="截止时间",
         help_text="待办事项的截止时间，可选填"
     )
-    category_id = models.BigIntegerField(
+    # 将category定义为外键，替代手动的category_id + @property
+    category = models.ForeignKey(
+        Category,
+        on_delete=models.SET_NULL,  # 分类删除时，待办的category设为null
         null=True,
-        blank=True,
-        verbose_name="分类ID",
-        help_text="关联的分类ID，对应t_category表的id字段，可选填"
+        related_name="todos",  # 允许通过Category查询关联的待办
+        verbose_name="所属分类"
     )
     created_at = models.DateTimeField(
         default=timezone.now,  # 新增时自动生成
@@ -75,61 +77,40 @@ class Todo(models.Model):
     def __str__(self):
         return self.title
 
-    @property
-    def category(self):
-        """获取关联的分类对象（非数据库层面关联）"""
-        if self.category_id:
-            try:
-                return Category.objects.get(id=self.category_id)
-            except Category.DoesNotExist:
-                return None
-        return None
-
 
 class TodoTag(models.Model):
     """待办-标签关联表（表名 t_todo_tag）"""
-    todo_id = models.BigIntegerField(
-        verbose_name="待办ID",
-        help_text="关联的待办事项ID，对应t_todo表的id字段"
+    # 改用外键关联，替代BigIntegerField
+    todo = models.ForeignKey(
+        Todo,
+        on_delete=models.CASCADE,  # 当Todo删除时，关联的TodoTag也删除
+        related_name="todotags",  # 定义反向关联名称，供Todo查询关联的标签
+        verbose_name="待办事项",
+        help_text="关联的待办事项，对应t_todo表"
     )
-    tag_id = models.BigIntegerField(
-        verbose_name="标签ID",
-        help_text="关联的标签ID，对应t_tag表的id字段"
+    tag = models.ForeignKey(
+        Tag,
+        on_delete=models.CASCADE,  # 当Tag删除时，关联的TodoTag也删除
+        related_name="todotags",  # 定义反向关联名称，供Tag查询关联的待办
+        verbose_name="标签",
+        help_text="关联的标签，对应t_tag表"
     )
     created_at = models.DateTimeField(
-        default=timezone.now,  # 新增时自动生成
-        verbose_name="创建时间",
-        help_text="关联关系的创建时间，自动生成"
+        default=timezone.now,
+        verbose_name="创建时间"
     )
     updated_at = models.DateTimeField(
-        auto_now=True,  # 更新时自动刷新
-        verbose_name="更新时间",
-        help_text="关联关系最后更新的时间，自动更新"
+        auto_now=True,
+        verbose_name="更新时间"
     )
 
     class Meta:
         verbose_name = "待办-标签关联"
         verbose_name_plural = "待办-标签关联"
-        unique_together = ("todo_id", "tag_id")  # 避免重复关联
+        unique_together = ("todo", "tag")  # 避免重复关联
         ordering = ["-created_at"]
         db_table = "t_todo_tag"
         db_table_comment = "待办事项与标签的关联表，实现多对多关系"
 
     def __str__(self):
-        return f"Todo {self.todo_id} - Tag {self.tag_id}"
-
-    @property
-    def todo(self):
-        """获取关联的待办对象"""
-        try:
-            return Todo.objects.get(id=self.todo_id)
-        except Todo.DoesNotExist:
-            return None
-
-    @property
-    def tag(self):
-        """获取关联的标签对象"""
-        try:
-            return Tag.objects.get(id=self.tag_id)
-        except Tag.DoesNotExist:
-            return None
+        return f"Todo {self.todo.id} - Tag {self.tag.id}"
