@@ -43,3 +43,7 @@ htmlcov/
 dist/
 build/
 MANIFEST
+
+# 前端
+/frontend_vue/node_modules/
+/frontend_vue/dist/
