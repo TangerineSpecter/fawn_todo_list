@@ -14,6 +14,8 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf import settings
+from django.conf.urls.static import static
 from django.urls import path, include
 from django.views.generic import TemplateView
 
@@ -25,3 +27,6 @@ urlpatterns = [
     path('tag/', include('tag.urls')),  # 标签接口
     path('category/', include('category.urls'))  # 分类接口
 ]
+
+# 添加静态文件URL配置
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

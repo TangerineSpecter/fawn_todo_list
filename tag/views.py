@@ -8,5 +8,5 @@ from tag.models import Tag
 class TagListView(View):
 
     def get(self, request):
-        result = Tag.objects.values('id', 'name')
+        result = Tag.objects.values('id', 'name', 'color')
         return success_result(list(result))

@@ -7,9 +7,16 @@ class Tag(models.Model):
     """标签表（表名 t_tag）"""
     name = models.CharField(
         max_length=50,
-        unique=True,
+    unique=True,
         verbose_name="标签名称",
         help_text="标签的名称，如紧急、重要、会议等，不可重复"
+    )
+    color = models.CharField(
+        max_length=20,
+        null=True,
+        blank=True,
+        verbose_name="显示颜色",
+        help_text="用于前端展示的颜色值，如#FF5733，可选填"
     )
     created_at = models.DateTimeField(
         default=timezone.now,  # 新增时自动生成

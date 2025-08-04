@@ -69,7 +69,8 @@
         </div>
         <ul class="menu w-full space-y-1 px-2">
           <li>
-            <a @click="openTagModal()" class="flex items-center gap-3 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-all duration-200">
+            <a @click="openTagModal()"
+              class="flex items-center gap-3 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-all duration-200">
               <TagOne theme="outline" size="20" stroke="#64748b" :strokeWidth="3" />
               <span class="font-medium">添加标签</span>
             </a>

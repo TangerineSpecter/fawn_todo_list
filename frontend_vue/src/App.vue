@@ -3,7 +3,7 @@
     <div class="navbar-start">
       <h1 class="text-[clamp(1.8rem,4vw,0.5rem)] font-bold text-slate-800 dark:text-white tracking-tight p-2">
         <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-indigo-600">Todo</span>
-        测试更新
+        清单
       </h1>
     </div>
     <div class="navbar-center hidden lg:flex">

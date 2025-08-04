@@ -27,6 +27,7 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 # Application definition
+DEFAULT_PORT = "12088"
 
 INSTALLED_APPS = [
     'django.contrib.contenttypes',
@@ -56,11 +57,6 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'fawn_todo_list.urls'
-
-STATIC_URL = '/static/'  # 静态文件访问 URL
-STATICFILES_DIRS = [
-    BASE_DIR / 'static',  # 指向项目根目录的 static 文件夹
-]
 
 TEMPLATES = [
     {
@@ -124,7 +120,11 @@ USE_I18N = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'  # 静态文件访问 URL
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',  # 指向项目根目录的 static 文件夹
+]
+STATIC_ROOT = BASE_DIR / 'staticfiles'  # 生产环境静态文件收集目录
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

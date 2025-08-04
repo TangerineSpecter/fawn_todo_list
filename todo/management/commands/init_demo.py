@@ -22,14 +22,14 @@ class Command(BaseCommand):
         self.stdout.write("创建演示数据...")
 
         # 分类
-        work_cat = Category.objects.create(name="工作")
-        life_cat = Category.objects.create(name="生活")
-        study_cat = Category.objects.create(name="学习")
+        work_cat = Category.objects.create(name="工作", color="#3b82f6")
+        life_cat = Category.objects.create(name="生活", color="#10b981")
+        study_cat = Category.objects.create(name="学习", color="#8b5cf6")
 
         # 标签
-        urgent_tag = Tag.objects.create(name="紧急")
-        daily_tag = Tag.objects.create(name="日常")
-        important_tag = Tag.objects.create(name="重要")
+        urgent_tag = Tag.objects.create(name="紧急", color="#f59e0b")
+        important_tag = Tag.objects.create(name="重要", color="#ef4444")
+        daily_tag = Tag.objects.create(name="个人", color="#6366f1")
 
         # 待办
         todo1 = Todo.objects.create(

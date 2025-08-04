@@ -1,0 +1,34 @@
+# 忽略前端Vue目录
+frontend_vue/
+
+# 忽略虚拟环境
+venv/
+.env
+
+# 忽略IDE配置文件
+.idea/
+.vscode/
+*.suo
+*.ntvs*.*
+*.njsproj
+*.sln
+
+# 忽略Python编译文件
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# 忽略测试和文档
+/tests/
+/docs/
+
+# 忽略日志文件
+*.log
+
+# 忽略Docker相关文件（避免递归）
+.dockerignore
+Dockerfile
+
+# 忽略收集后的静态文件目录（生产环境）
+# staticfiles/  # 注意：不要忽略staticfiles目录，因为这是生产环境需要的静态文件
