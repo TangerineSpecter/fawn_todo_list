@@ -20,6 +20,7 @@
 - Daisyui 5.0.46
 - Pinia 2.1.7
 - Icon Park 2.1.1
+- Node 20.19.3
 
 ## 功能特点
 
@@ -72,6 +73,12 @@ python manage.py migrate
 ### 3. 配置前端环境
 
 ```bash
+# 使用指定 node 版本
+nvm use 20
+# 编译项目
+npm install
+# 启动项目
+npm run dev
 # 在 frontend_vue 目录下，执行脚本打包更新前端页面
 sh update.sh
 ```
